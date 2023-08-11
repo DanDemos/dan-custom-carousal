@@ -7,13 +7,23 @@ const danPrevButton = document.getElementById('dan-prev');
 const danNextButton = document.getElementById('dan-next');
 const danCarouselItems = document.querySelectorAll('.dan-carousel-item');
 const danCarouselTextArea = document.querySelectorAll('.dan-carousel-text-area');
+let transformWidth;
+let isMobile = window.innerWidth < 769
+let mobileReachEnd = false;
+
+if (isMobile) {
+  transformWidth = 100
+}
+else{
+  transformWidth = 50
+}
 
 function setItemWidth() {
   const itemWidth = (window.innerWidth * CAROUSEL_ITEM_WIDTH_PERCENTAGE) / 100;
   danCarousel.forEach(item1 => {
     Array.from(item1.children).forEach(item => {
-      if (window.innerWidth < 800) {
-        item.querySelector('img').style.width = `800px`;
+      if (isMobile) {
+        item.querySelector('img').style.width = `769px`;
       }
       else{
         item.querySelector('img').style.width = `${itemWidth}px`;
@@ -23,8 +33,8 @@ function setItemWidth() {
 
 
   danCarouselTextArea.forEach(item => {
-    if (window.innerWidth < 800) {
-      item.style.width = `800px`;
+    if (isMobile) {
+      item.style.width = `769px`;
     }
     else{
       item.style.width = `${itemWidth}px`;
@@ -93,7 +103,7 @@ function handleCarouselClick(event) {
     let childArr;
     let childArrLength;
 
-    if (targetParent2.classList.contains('active1') || targetParent2.classList.contains('active2')) {
+    if ((targetParent2.classList.contains('active1') || targetParent2.classList.contains('active2')) && isMobile != true) {
       childArr = Array.from(targetParent2.parentElement.children)
       let childArrLength = childArr.length
 
@@ -114,7 +124,7 @@ function handleCarouselClick(event) {
           handleMouseInteraction(targetParent2.nextElementSibling, false)
           handleMouseInteraction(targetParent2, false)
 
-          let prevTranslateValue = Number(targetParent2.parentElement.style.transform.match(/\((.*?)%\)/)[1]) + 50
+          let prevTranslateValue = Number(targetParent2.parentElement.style.transform.match(/\((.*?)%\)/)[1]) + transformWidth
           targetParent2.parentElement.style.transform = `translateX(${prevTranslateValue}%)`;
         }
 
@@ -130,7 +140,7 @@ function handleCarouselClick(event) {
           handleMouseInteraction(targetParent2.previousElementSibling, false)
           handleMouseInteraction(targetParent2, false)
 
-          let prevTranslateValue = Number(targetParent2.parentElement.style.transform.match(/\((.*?)%\)/)[1]) - 50
+          let prevTranslateValue = Number(targetParent2.parentElement.style.transform.match(/\((.*?)%\)/)[1]) - transformWidth
           targetParent2.parentElement.style.transform = `translateX(${prevTranslateValue}%)`;
         }
       }
@@ -139,7 +149,7 @@ function handleCarouselClick(event) {
       childArr = Array.from(Array.from(targetParent1.parentElement.children).find(element => element.classList.contains("dan-carousel")).children)
       childArrLength = childArr.length
       let active1Ele;
-      let active2Ele
+      let active2Ele;
 
       for (const element of childArr) {
         if (element.classList.contains('active1')) {
@@ -156,9 +166,14 @@ function handleCarouselClick(event) {
         }
         count++
       }
-
       if (isPrevButton) {
-        if (count != 0) {
+        if (isMobile && mobileReachEnd){
+          console.log(mobileReachEnd)
+          mobileReachEnd = false
+          let prevTranslateValue = Number(active1Ele.parentElement.style.transform.match(/\((.*?)%\)/)[1]) + transformWidth
+          active1Ele.parentElement.style.transform = `translateX(${prevTranslateValue}%)`;
+        }
+        else if (count != 0) {
           active1Ele.previousElementSibling.classList.add('active1')
           active1Ele.classList.remove('active1')
           active1Ele.classList.add('active2')
@@ -167,10 +182,9 @@ function handleCarouselClick(event) {
           handleMouseInteraction(active1Ele.nextElementSibling, false)
           handleMouseInteraction(active1Ele, false)
 
-          let prevTranslateValue = Number(active1Ele.parentElement.style.transform.match(/\((.*?)%\)/)[1]) + 50
+          let prevTranslateValue = Number(active1Ele.parentElement.style.transform.match(/\((.*?)%\)/)[1]) + transformWidth
           active1Ele.parentElement.style.transform = `translateX(${prevTranslateValue}%)`;
         }
-
 
       } else if (isNextButton) {
 
@@ -183,11 +197,16 @@ function handleCarouselClick(event) {
           handleMouseInteraction(active2Ele.previousElementSibling, false)
           handleMouseInteraction(active2Ele, false)
 
-          let prevTranslateValue = Number(active2Ele.parentElement.style.transform.match(/\((.*?)%\)/)[1]) - 50
+          let prevTranslateValue = Number(active2Ele.parentElement.style.transform.match(/\((.*?)%\)/)[1]) - transformWidth
+          active2Ele.parentElement.style.transform = `translateX(${prevTranslateValue}%)`;
+        }
+        else if (isMobile && count == childArrLength - 2 && mobileReachEnd==false){
+          mobileReachEnd = true
+          let prevTranslateValue = Number(active2Ele.parentElement.style.transform.match(/\((.*?)%\)/)[1]) - transformWidth
           active2Ele.parentElement.style.transform = `translateX(${prevTranslateValue}%)`;
         }
       }
-      
+
     }
   }
 }
