@@ -24,9 +24,13 @@ function setItemWidth() {
     Array.from(item1.children).forEach(item => {
       if (isMobile) {
         item.querySelector('img').style.width = `769px`;
+        item.querySelector('img').style.minWidth = `769px`;
+        item.querySelector('img').style.maxWidth = `769px`;
       }
       else{
         item.querySelector('img').style.width = `${itemWidth}px`;
+        item.querySelector('img').style.minWidth = `${itemWidth}px`;
+        item.querySelector('img').style.maxWidth = `${itemWidth}px`;
       }
     });
   })
@@ -49,9 +53,18 @@ function initActive() {
       item.classList.toggle("active1", index === 0);
       item.classList.toggle("active2", index === 1);
 
+      if (isMobile) {
+        Array.from(item.children).forEach(child => {
+            Array.from(child.children).find(element => element.classList.contains("dan-carousel-text-area")).style.opacity = 1
+        })
+          
+      }
+
     });
     item1.style.transform = `translateX(0%)`;
   })
+
+
 }
 
 

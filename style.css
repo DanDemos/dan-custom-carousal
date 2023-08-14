@@ -104,7 +104,7 @@
 .dan-carousel-text-area{
   position: absolute;
   z-index: 1;
-  bottom: 0;
+  bottom: 10%;
   color: white;
   text-align: center;
   opacity: 0;
