@@ -92,16 +92,16 @@ function handleMouseInteraction(item, enlarge) {
     item1.classList.toggle('hovered', enlarge);
   })
 
-  item.classList.toggle('col-sm-9', enlarge);
-  item.classList.toggle('col-sm-6', !enlarge);
+  item.classList.toggle('col-md-9', enlarge);
+  item.classList.toggle('col-md-6', !enlarge);
   
   const isActive1 = item.classList.contains('active1');
   const isActive2 = item.classList.contains('active2');
   
   const sibling = isActive1 ? item.nextElementSibling : isActive2 ? item.previousElementSibling : null;
   if (sibling) {
-    sibling.classList.toggle('col-sm-3', enlarge);
-    sibling.classList.toggle('col-sm-6', !enlarge);
+    sibling.classList.toggle('col-md-3', enlarge);
+    sibling.classList.toggle('col-md-6', !enlarge);
   }
 }
 
