@@ -38,7 +38,7 @@ function setItemWidth() {
 
   danCarouselTextArea.forEach(item => {
     if (isMobile) {
-      item.style.width = `769px`;
+      // item.style.width = `769px`;
     }
     else{
       item.style.width = `${itemWidth}px`;
