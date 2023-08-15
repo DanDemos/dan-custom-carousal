@@ -8,7 +8,7 @@ const danNextButton = document.getElementById('dan-next');
 const danCarouselItems = document.querySelectorAll('.dan-carousel-item');
 const danCarouselTextArea = document.querySelectorAll('.dan-carousel-text-area');
 let transformWidth;
-let isMobile = window.innerWidth < 769
+let isMobile = window.innerWidth < 768
 let mobileReachEnd = false;
 
 if (isMobile) {
@@ -18,14 +18,45 @@ else{
   transformWidth = 50
 }
 
+function checkArrowDisplay(){
+  danCarousel.forEach(eachCarousal => {
+    let slideCount = 0;
+    Array.from(eachCarousal.children).forEach(eachSlide => {
+      slideCount++
+    })
+
+    let imaginary_num;
+    if (isMobile) {
+      imaginary_num = 1
+    } else {
+      imaginary_num = 2
+    }
+
+    if (eachCarousal.style.transform.match(/\((.*?)%\)/)[1] == 0) {
+
+      Array.from(eachCarousal.parentElement.children).find(element => element.classList.contains("arrowAnim") && element.classList.contains("prev")).style.opacity = 0
+    }
+    else if(((slideCount-imaginary_num)*transformWidth)* -1 == eachCarousal.style.transform.match(/\((.*?)%\)/)[1]){
+
+      Array.from(eachCarousal.parentElement.children).find(element => element.classList.contains("arrowAnim") && element.classList.contains("next")).style.opacity = 0
+    }
+    else{
+      Array.from(eachCarousal.parentElement.children).find(element => element.classList.contains("arrowAnim") && element.classList.contains("prev")).style.opacity = 1
+      Array.from(eachCarousal.parentElement.children).find(element => element.classList.contains("arrowAnim") && element.classList.contains("next")).style.opacity = 1
+
+    }
+  })
+
+}
+
 function setItemWidth() {
   const itemWidth = (window.innerWidth * CAROUSEL_ITEM_WIDTH_PERCENTAGE) / 100;
   danCarousel.forEach(item1 => {
     Array.from(item1.children).forEach(item => {
       if (isMobile) {
-        item.querySelector('img').style.width = `769px`;
-        item.querySelector('img').style.minWidth = `769px`;
-        item.querySelector('img').style.maxWidth = `769px`;
+        item.querySelector('img').style.width = `768px`;
+        item.querySelector('img').style.minWidth = `768px`;
+        item.querySelector('img').style.maxWidth = `768px`;
       }
       else{
         item.querySelector('img').style.width = `${itemWidth}px`;
@@ -38,7 +69,7 @@ function setItemWidth() {
 
   danCarouselTextArea.forEach(item => {
     if (isMobile) {
-      // item.style.width = `769px`;
+      // item.style.width = `768px`;
     }
     else{
       item.style.width = `${itemWidth}px`;
@@ -48,6 +79,7 @@ function setItemWidth() {
 }
 
 function initActive() {
+  checkArrowDisplay()
   danCarousel.forEach(item1 => {
     Array.from(item1.children).forEach((item, index) => {
       item.classList.toggle("active1", index === 0);
@@ -181,7 +213,6 @@ function handleCarouselClick(event) {
       }
       if (isPrevButton) {
         if (isMobile && mobileReachEnd){
-          console.log(mobileReachEnd)
           mobileReachEnd = false
           let prevTranslateValue = Number(active1Ele.parentElement.style.transform.match(/\((.*?)%\)/)[1]) + transformWidth
           active1Ele.parentElement.style.transform = `translateX(${prevTranslateValue}%)`;
@@ -222,6 +253,7 @@ function handleCarouselClick(event) {
 
     }
   }
+  checkArrowDisplay()
 }
 
 danCarousel.forEach(item1 => {
